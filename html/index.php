@@ -1,12 +1,12 @@
 <?php
-require_once('../../opengraphprotocol.org/lib/markdown.php');
+require_once('../lib/markdown.php');
 
 if ($_SERVER['HTTP_HOST'] != 'openidconnect.com') {
 	header("Location: http://openidconnect.com/", false, "301");
 	exit;
 }
 
-$markdown = @file_get_contents('index.markdown');
+$markdown = @file_get_contents('../pages/index.markdown');
 
 if (!$markdown) {
 	header("HTTP/1.1 500 Internal Server Error");
@@ -26,13 +26,13 @@ $html = Markdown($markdown);
 		<meta property="og:title" content="OpenID Connect" />
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content="http://openidconnect.com/" />
-    <meta property="og:image" content="http://openidconnect.com/openid_connect.png" />
+    <meta property="og:image" content="http://openidconnect.com/static/openid_connect.png" />
     <meta property="fb:admins" content="24400320" />
   </head>
 	<body>
 		<div id="body">
 		<div id="header">
-			<img src="openid_connect.png"  />
+			<img src="static/openid_connect.png"  />
 			<h2 style="margin-top:2em; text-align: left;">A strawman...</h2>
 		</div>
 		<div id="content">
