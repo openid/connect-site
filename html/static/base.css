@@ -103,3 +103,37 @@ td {
 	margin: 0;
 	margin-bottom: 1em;
 }
+.span-18{width:715px}
+.last{margin-right:0}
+.append-1{padding-right:40px}
+.prepend-1{padding-left:40px}
+#nav {
+	padding-top: 7px;
+	background-color: #f8fbfd;
+}
+#nav ul.navigation {
+	margin-bottom: 7px;
+}
+#nav ul.navigation li {
+	margin-right: 0;
+}
+#nav ul.navigation li a {
+	color: #515151;
+	text-decoration: none;
+	padding: 8px 24px 8px 24px;
+	margin-left: -4px;
+}
+#nav ul.navigation li a.selected {
+	background-color: #515151;
+	color: #fff;
+}
+#nav ul.navigation a:hover {
+	background: #e5f1ff;
+}
+ul.navigation, ul.navigation li {
+  list-style: none;
+}
+ul.navigation li {
+  display: inline;
+  margin-right: 1.3em;
+}

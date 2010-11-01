@@ -1,12 +1,27 @@
 <?php
 require_once('../lib/markdown.php');
 
+// http://no-www.org/
 if ($_SERVER['HTTP_HOST'] != 'openidconnect.com') {
   header("Location: http://openidconnect.com/", false, "301");
   exit;
 }
 
+// this is a giant hack...don't like it then install a CMS
+$pages = array(
+  'About',
+  'FAQ'
+);
+$current_page = 'index';
 $markdown = @file_get_contents('../pages/index.markdown');
+
+foreach ($pages as $page) {
+  if (stristr($_SERVER['REQUEST_URI'], $page)) {
+    $markdown = @file_get_contents("../pages/$page.markdown");
+    $current_page = $page;
+    break;
+  }
+}
 
 if (!$markdown) {
   header("HTTP/1.1 500 Internal Server Error");
@@ -22,7 +37,7 @@ $html = Markdown($markdown);
   <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <title>OpenID Connect</title>
-  <link rel="stylesheet" href="static/base.css" type="text/css"/>
+  <link rel="stylesheet" href="/static/base.css" type="text/css"/>
   <meta property="og:title" content="OpenID Connect" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="http://openidconnect.com/" />
@@ -32,13 +47,31 @@ $html = Markdown($markdown);
 <body>
   <div id="body">
     <div id="header">
-      <img src="static/openid_connect.png"  />
-      <h2 style="margin-top:2em; text-align: left;">A strawman...</h2>
+      <a href="/"><img src="/static/openid_connect.png"  /></a>
+    </div>
+    <div id="nav" class="column span-18 append-1 prepend-1">
+      <ul class="navigation">
+<? // hate using PHP this way
+foreach ($pages as $page) {
+  if ($page == $current_page) {
+    $class = ' class="selected"';
+  } else {
+    $class = '';
+  }
+  echo "        <li><a href='/" . strtolower($page) . "/'$class>$page</a></li>\n";
+}
+?>
+      </ul>
     </div>
     <div id="content">
+      <br />
       <?= $html ?>
     </div>
     <div id="footer">
+      <hr />
+      <a href="http://github.com/openid">GitHub</a> |
+      <a href="http://lists.openid.net/mailman/listinfo/openid-specs-connect">Mailing List</a> |
+      <a href="http://openid.net/foundation/">OpenID Foundation</a> © 2010
     </div>
     <script type="text/javascript">
     var _sf_async_config={uid:1415,domain:"openidconnect.com"};
