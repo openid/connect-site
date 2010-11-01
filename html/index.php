@@ -17,7 +17,7 @@ $markdown = @file_get_contents('../pages/index.markdown');
 
 foreach ($pages as $page) {
   if (stristr($_SERVER['REQUEST_URI'], $page)) {
-    $markdown = @file_get_contents("../pages/$page.markdown");
+    $markdown = @file_get_contents('../pages/' . strtolower($page) . '.markdown');
     $current_page = $page;
     break;
   }
