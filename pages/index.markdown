@@ -80,8 +80,8 @@ For example, the [Simple Registration extension](http://openid.net/specs/openid-
 
 If the `openid2_url` field is present, the client MUST verify that the user info endpoint is authoritative to issue assertions about it. This is done by performing [OpenID 2.0 discovery](http://openid.net/specs/openid-authentication-2_0.html#anchor12) on the URL and finding a &lt;xrd:Service&gt; element with the following information:
 
- * `&lt;xrd:Type&gt;` - whose text content is "http://specs.openid.net/connect/".
- * `&lt;xrd:URI&gt;` - whose text content is the URL of this user info endpoint.
+ * `<xrd:Type>` - whose text content is "http://specs.openid.net/connect/".
+ * `<xrd:URI>` - whose text content is the URL of this user info endpoint.
 
 If this tag is not found via OpenID 2.0 discovery or if the URI does not match, the client MUST ignore the presence of the `openid2_url` parameter.
 
