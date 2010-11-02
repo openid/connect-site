@@ -155,8 +155,8 @@ If the client does not have a valid client identifier and secret, it shall make 
 
 For example (line breaks added for display purposes):
 
-    GET /oauth/token?type=client_associate&
-    redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2callback HTTP/1.1
+    POST /oauth/token
+    type=client_associate&redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2callback HTTP/1.1
     Host: server.example.com
 
 Before responding, the server should check to see if the redirect URL is pre-registered outside of this OpenID flow. If so an error response should be sent. Servers will need to develop a policy to handle what happens when a redirect URL is pre-registered by a developer but has already been used to create dynamic associations. Most likely this means that new dynamic associations with that redirect URL will result in an error but requests using existing dynamic associations continue working until they expire.
