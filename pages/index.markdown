@@ -35,19 +35,22 @@ Assuming the user authorized the client's request, the client will [obtain an ac
  * `access_token` - REQUIRED. The access token issued by the authorization server.
  * `expires_in` - OPTIONAL. The duration in seconds of the access token lifetime.
  * `issued_at` - REQUIRED. A unix timestamp of when this signature was created.
- * `user_id` - REQUIRED. A locally unique and never reassigned identifier for the user paired with the domain of the authorization server. e.g. "24400320@facebook.com", "AItOawmwtWwcT0k51BayewNvutrJUqsvl6qs7A4@google.com", or "david@recordon.com".
+ * `user_id` - REQUIRED. A locally unique and never reassigned identifier for the user. e.g. "24400320" or "AItOawmwtWwcT0k51BayewNvutrJUqsvl6qs7A4".
+ * `domain` - REQUIRED. The domain of the authorization server such that when paired with the `user_id` creates a globally unique and never reassigned identifier. e.g. "facebook.com", "google.com", or "recordon.com".
 
 The `signed` parameter is a simple way to make sure that the data received by the client through the User-Agent flow (or other untrusted channels) has not been modified. It is signed by the server using the client secret which was previously established over a trusted channel. The signed_request parameter is the concatenation of a HMAC SHA-256 signature string, a period (.), and a base64url encoded JSON object. Note that [base64url encoding](http://tools.ietf.org/html/rfc4648#section-5) has two different characters from base64 and no padding.
 
-The client MUST verify that the server's token endpoint is authoritative to issue assertions about the user identifier. If the domain (including sub-domain) of the user identifier matches the domain of the server's token endpoint URI then this verification is complete. If they do not match, the client MUST verify the assertion via [Discovery](#discovery).
+An authorization server MUST only issue assertions about user identifiers on its domain. The client MUST verify that the `user_domain` matches the domain (including sub-domain) of the server's token endpoint URI. The authorization server is responsible for managing its own local namespace and enforcing that each `user_id` is locally unique and never reassigned.
+
+When the client stores the user identifier, it MUST store the tuple of the user identifier and domain. The `user_id` MUST NOT be over 255 ASCII characters in length.
 
 The client SHOULD verify the signature. If the client does not verify the signature, it MUST make a [User Info API](#API) request and include its client identifier when doing so.
 
-Note that unlike OpenID 1.0 and 2.0, the user identifier is different from the user's profile URL. The user identifier will generally be different from the user's email address or Jabber ID. The exception to this generalization is when your OpenID is hosted on a domain which you own and control.
-
-When the client stores the user identifier, it's RECOMMENDED that they first split it on the "@" symbol and store it in two parts. The string on the left of the "@" symbol MUST NOT be over 255 ASCII characters in length.
+Note that unlike OpenID 1.0 and 2.0, the user identifier is different from the user's profile URL. The user identifier will generally be different from the user's email address or Jabber ID. The exception to this generalization is when your OpenID is hosted on a domain which you own and control. In that case the user identifier may be "david" from the server's domain of "recordon.com".
 
 *(Code sample goes here!)*
+
+*(Should `user_id` just be `id`?)
 
 <a name="API"></a>
 
@@ -60,7 +63,8 @@ Clients SHOULD include a `client_id` parameter and MUST do so if they do not ver
 
 The response is a JSON object which contains some (or all) of the following reserved keys:
 
- * `user_id` - e.g. "AItOawmwtWwcT0k51BayewNvutrJUqsvl6qs7A4@google.com".
+ * `user_id` - e.g. "AItOawmwtWwcT0k51BayewNvutrJUqsvl6qs7A4".
+ * `domain` - e.g. "google.com".
  * `asserted_user` - One of "true" if the access was issued for this user or "false" if it is for a different user.
  * `openid2_url` - If the user also has an [OpenID 2.0](http://openid.net/specs/openid-authentication-2_0.html) account, the user identifier URL which the client may currently have stored within their database.
  * `profile_urls` - an array of URLs that belong to the user across any number of domains.
